@@ -8,19 +8,19 @@
 #include "boolean.h"
 #include "queue.h"
 
-#define Nil 0
+#define Nill 0
 #define MaxElS 100
 /* Nil adalah stack dengan elemen kosong . */
 /* Karena indeks dalam bhs C dimulai 0 maka tabel dg indeks 0 tidak dipakai */
 
 typedef Queue infotypes;
-typedef int address;   /* indeks tabel */
+typedef int addrSt;   /* indeks tabel */
 
 /* Contoh deklarasi variabel bertype stack dengan ciri TOP : */
 /* Versi I : dengan menyimpan tabel dan alamat top secara eksplisit*/
 typedef struct { 
 	infotypes T[MaxElS+1]; /* tabel penyimpan elemen */
-	address TOP;  /* alamat TOP: elemen puncak */
+	addrSt TOP;  /* alamat TOP: elemen puncak */
 } Stack;
 /* Definisi stack S kosong : S.TOP = Nil */
 /* Elemen yang dipakai menyimpan nilai Stack T[1]..T[MaxEl] */

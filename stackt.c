@@ -17,12 +17,12 @@ void CreateEmptyStack (Stack *S)
 /* I.S. sembarang; */
 /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */
 /* jadi indeksnya antara 1.. MaxEl+1 karena 0 tidak dipakai */
-/* Ciri stack kosong : TOP bernilai Nil */
+/* Ciri stack kosong : TOP bernilai Nill */
 {
 	/*KAMUS*/
 	
 	/*ALGORITMA*/
-	Top(*S) = Nil;
+	Top(*S) = Nill;
 }
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
@@ -32,7 +32,7 @@ boolean IsEmptyStack (Stack S)
 	/*KAMUS*/
 	
 	/*ALGORITMA*/
-	return (Top(S) == Nil);
+	return (Top(S) == Nill);
 }
 boolean IsFullStack (Stack S)
 /* Mengirim true jika tabel penampung nilai elemen stack penuh */
@@ -73,7 +73,6 @@ void ReadFileM (Stack *S, Queue *TQ,int l)
 	int i;
 	TabInt p;
 	int n,q;
-	Queue teq;
 	time_t t;
 	
 	
@@ -90,7 +89,6 @@ void ReadFileM (Stack *S, Queue *TQ,int l)
 		}
 		AddAsLastEli(&p,n);
 	}
-	TulisIsiTab(p);
 	CreateEmptyStack(S);
 	for (i=GetFirstIdxi(p);i<=GetLastIdxi(p);i++)
 	{

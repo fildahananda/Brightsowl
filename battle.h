@@ -4,9 +4,12 @@
 #include "stackt.h"
 #include "queue.h"
 #include "boolean.h"
+#include "enemy.h"
+#include "stat.h"
+#include "player.h"
 
 
-void battle (Stack stackm);
+void battle (Player *P, Enemy *M, int *menang);
 /*KAMUS LOKAL
  *Stack S (untuk mengacak action monster)*/
 
@@ -20,11 +23,16 @@ void printactuser(Queue Q, int cr, char *ap);
 /*I.S Menerima aksi user
  *F.S Memasukkan aksi user pada round*/
  
-void printactuser (Queue Q);
+ 
+void inputactuser (Queue *Q);
+void printnama(Name A);
 
-int randomdmg (Player *P, Enemy *M, int pmenang);
+
+void printcomment(Player *P, Enemy *M,char ap, char am);
+
+int randomdmg (Player P, Enemy M, boolean pmenang);
 /*I.S Menerima data dari monster, player, dan kebenaran apakah player menang atau tidak
  * F.S Menghasilkan nilai damage dan mengurangi HP yang kalah*/
 
-void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr, char *ap, *char am);
+void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr, char *am);
 #endif

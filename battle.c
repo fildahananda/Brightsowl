@@ -2,20 +2,22 @@
 #include "queue.h"
 #include "boolean.h"
 #include "battle.h"
+#include "enemy.h"
+#include "player.h"
+#include "stat.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MAX_STRING_LEN 20
 
-void battle (Player *P, Enemy *M)
+void battle (Player *P, Enemy *M, int *menang)
 /*KAMUS LOKAL
  *Stack S (untuk mengacak action monster)*/
 {
-	int round, randa, randb, cr,dmg;
+	int round, randa, randb, cr;
 	Queue Qp,Qm;
 	Stack S;
-	char am,ap;
+	char am,ap,nu;
 	time_t t;
 	
 	srand((unsigned) time(&t));
@@ -26,103 +28,145 @@ void battle (Player *P, Enemy *M)
 	}
 	while (randb==randa);
 	round=1;
-	cHp(M)=maxHp(stat(M));
-	ReadFileM(&S,move(*M),maxMoves(*M));
-	while (hpP>0 && hpM>0 && !IsEmptyStack(S))
+	cHp(*M)=maxHp(*M);
+	ReadFileM(&S,move(*M),maxm(*M));
+	while (cHp(*P)>0 && cHp(*M)>0 && !IsEmptyStack(S))
 	{
-		CreateEmpty(&Qp,4);
+		CreateEmptyQue(&Qp,4);
 		Pop(&S,&Qm);
 		cr=0;
-		while (!IsFull(Qp))
+		while (!IsFullQue(Qp))
 		{
-			cetakbattle(P,M,Qp,Qm,round,randa,randb,cr,&am);
+			cetakbattle(*P,*M,Qp,Qm,round,randa,randb,cr,&am);
+			printf("Inputted command: ");
 			printactuser(Qp,cr,&ap);
+			printf("\n");
+			printf("Input command : ");
 			inputactuser(&Qp);
 		}
 		cr=1;
-		while (cr<=4)
+		while (cr<=4 && cHp(*P)>0 && cHp(*M)>0)
 		{
-			cetakbattle(P,M,Qp,Qm,round,randa,randb,cr,&am);
-			printactuser(Q,cr,&ap);
-			dmg=randomdmg(P,M,pmenang(ap,am));
-			if (pmenang(ap,am)==1)
-			{
-				cHp(*M)-=dmg;
-			}
-			else
-			{
-				cHp(*P)-=dmg;
-			}
-			
+			cetakbattle(*P,*M,Qp,Qm,round,randa,randb,cr,&am);
+			printf("Inputted command: ");
+			printactuser(Qp,cr,&ap);
+			printf("\n");
+			printcomment(P,M,ap,am);
 			cr++;
 		}
+		round++;
 	}
-}
-
-void printcomment(Player P, Enemy M,int pmenang, int dmg)
-{
-	if (pmenang==1)
+	printf("ehe");
+	if (cHp(*M)<=0)
 	{
-		printnama(nama(P));
-		printf(" menyerang! ");
-		printnama(nama(M));
-		printf(" terkena %d damage!",dmg);
+		(*menang)=1;
 	}
 	else
 	{
-		printnama(nama(M));
-		printf(" menyerang! ");
-		printnama(nama(P));
-		printf(" terkena %d damage!",dmg);
+		(*menang)=0;
 	}
 }
 
-void printmonster()
+void printcomment(Player *P, Enemy *M,char ap, char am)
 {
-	
-}
-
-int pmenang(char ap, char am)
-{
-	int pm;
+	int dmg;
 	
 	if (ap=='A')
 	{
-		if (am=='A')
-		{pm=3;}
-		else if (am=='B')
-		{pm=2;}
+		if (am=='B')
+		{
+			printnama((*P).stat.name);
+			printf(" attacked! But ");
+			printnama((*M).stat.name);
+			printf(" blocked!");
+		}
+		else if (am=='A')
+		{
+			printnama((*P).stat.name);
+			printf(" tries to attack! But ");
+			printnama((*M).stat.name);
+			printf(" evaded!");
+		}
 		else if (am=='F')
-		{pm=1;}
+		{
+			dmg=randomdmg(*P,*M,true);
+			printnama((*P).stat.name);
+			printf(" attacked! ");
+			printnama((*M).stat.name);
+			printf(" -%d HP",dmg);
+			cHp(*M)-=dmg;
+		}
 	}
 	else if (ap=='B')
 	{
 		if (am=='A')
-		{pm=1;}
+		{
+			printnama((*M).stat.name);
+			printf(" attacked! But ");
+			printnama((*P).stat.name);
+			printf(" blocked!");
+		}
 		else if (am=='B')
 		{
-			pm=3;
+			printnama((*P).stat.name);
+			printf(" Blocked. ");
+			printnama((*M).stat.name);
+			printf(" blocked too. Nothing happened.");
 		}
 		else if (am=='F')
 		{
-			pm=2;
+			dmg=randomdmg(*P,*M,false);
+			printnama((*P).stat.name);
+			printf(" blocked! but ");
+			printnama((*M).stat.name);
+			printf(" is too strong. HP-%d",dmg);
+			cHp(*P)-=dmg;
 		}
 	}
 	else if (ap=='F')
 	{
-		if (am=='A')
-		{pm=2;}
-		else if (am=='B')
+		if (am=='B')
 		{
-			pm=1;
+			dmg=randomdmg(*P,*M,true);
+			printnama((*M).stat.name);
+			printf(" blocked! but ");
+			printnama((*P).stat.name);
+			printf(" is too strong. HP-%d",dmg);
+			cHp(*M)-=dmg;
 		}
 		else if (am=='F')
 		{
-			pm=3;
+			printnama((*P).stat.name);
+			printf(" and ");
+			printnama((*M).stat.name);
+			printf(" both flocked. Nothing happened.");
+		}
+		else if (am=='A')
+		{
+			dmg=randomdmg(*P,*M,false);
+			printnama((*M).stat.name);
+			printf(" attacked! ");
+			printnama((*P).stat.name);
+			printf(" -%d HP",dmg);
+			cHp(*P)-=dmg;
 		}
 	}
-return pm;
+	printf("\n");
+	getchar();
 }
+
+void printnama(Name A)
+{
+	int i;
+	
+	for (i=0; i<=A.length; i++)
+	{
+		printf("%c",A.tabName[i]);
+	}
+}
+
+
+
 
 void printactuser(Queue Q, int cr, char *ap)
 {
@@ -131,9 +175,9 @@ void printactuser(Queue Q, int cr, char *ap)
 	int p;
 	
 	Qs=Q;
-	if (!IsFull(Q))
+	if (!IsFullQue(Q))
 	{
-		while (!IsEmpty(Qs))
+		while (!IsEmptyQue(Qs))
 		{
 			Del(&Qs,&ch);
 			printf("%c ",ch);
@@ -142,13 +186,13 @@ void printactuser(Queue Q, int cr, char *ap)
 	else
 	{
 		p=1;
-		while (!IsEmpty(Qs))
+		while (!IsEmptyQue(Qs))
 		{
 			Del(&Qs,&ch);
 			if (p==cr)
 			{
 				printf(">");
-				(*ap)=cr;
+				(*ap)=ch;
 			}
 			printf("%c ",ch);
 			p++;
@@ -158,13 +202,11 @@ void printactuser(Queue Q, int cr, char *ap)
 
 void printactmons(Queue Q, int a, int b, int cr,char *am)
 {
-	Queue Qs;
 	char ch;
 	int p;
 	
-	Qs=Q;
 	p=1;
-	while (!IsEmpty(Qs))
+	while (p<=4)
 	{
 		Del(&Q,&ch);
 		if ((p==a || p==b) && cr<p)
@@ -190,13 +232,10 @@ void inputactuser (Queue *Q)
 {
 	char c,temp;
 	
-	CreateEmpty(Q,4);
-	while (!IsFull(*Q))
-	{
-		scanf("%c ",&c);
+		scanf(" %c",&c);
 		if (c=='E')
 		{
-			if (!IsEmpty(*Q))
+			if (!IsEmptyQue(*Q))
 			{
 				Del(Q,&temp);
 			}
@@ -205,44 +244,37 @@ void inputactuser (Queue *Q)
 		{
 			Add(Q,c);
 		}
-	}
 }
  
-int randomdmg (Player P, Enemy M, int pmenang)
+int randomdmg (Player P, Enemy M, boolean pmenang)
 /*I.S Menerima data dari monster, player, dan kebenaran apakah player menang atau tidak
  * F.S Menghasilkan nilai damage dan mengurangi HP yang kalah*/
 {
-	int atk,def,dmg;
+	int at,df;
 	
-	if (pmenang!=3)
-	{
-		if (pmenang==1)
+		if (pmenang)
 		{
-			atk = atk(stat(*P));
-			def = def(stat(*M));
+			at = str(P);
+			df = def(M);
 		}
 		else
 		{
-			atk = atk(stat(*M));
-			def = def(stat(*P));
+			at = str(M);
+			df = def(P);
 		}
-		dmg = (rand()%30)+(atk*5)-(def*3);
-		
-	}
-	else
-	{
-		dmg=0;
-	}
-	return dmg;
+		return ((rand()%13)+(at*4)-(df*3));
 }
 
-void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr,  *char am)
+void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr,  char *am)
 {
 	printf("===========================================================================\n");
-	printf("|\t%s | LVL %d | HP %d | STR %d | DEF %d | Round %d |\n",name(P),lvl(P),cHp(P),str(stat(P)),def(stat(P)),round);
+	printnama(P.stat.name);
+	printf(" | LVL %d | HP %d | STR %d | DEF %d | Round %d |\n",lvl(P),cHp(P),str(P),def(P),round);
 	printf("===========================================================================\n");
-	printf("\t%s | HP %d | Command ",name(M),cHp(M));
-	printactmons(Qm,randa,randb,cr,&am);
+	printnama(M.stat.name);
+	printf(" | HP %d | Command ",cHp(M));
+	printactmons(Qm,randa,randb,cr,am);
 	printf("        |\n");
+	printf("===========================================================================\n");
 }
 
