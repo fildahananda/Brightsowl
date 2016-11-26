@@ -9,7 +9,7 @@
 #include "player.h"
 
 
-void battle (Player *P, Enemy *M, int *menang);
+void battle (Player *P, Enemy *M, boolean *menang);
 /*KAMUS LOKAL
  *Stack S (untuk mengacak action monster)*/
 

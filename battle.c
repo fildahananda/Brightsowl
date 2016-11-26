@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 
-void battle (Player *P, Enemy *M, int *menang)
+void battle (Player *P, Enemy *M, boolean *menang)
 /*KAMUS LOKAL
  *Stack S (untuk mengacak action monster)*/
 {
@@ -37,6 +37,8 @@ void battle (Player *P, Enemy *M, int *menang)
 		cr=0;
 		while (!IsFullQue(Qp))
 		{
+			printnama((*M).stat.name);
+			printf(" attacked!\n");
 			cetakbattle(*P,*M,Qp,Qm,round,randa,randb,cr,&am);
 			printf("Inputted command: ");
 			printactuser(Qp,cr,&ap);
@@ -44,6 +46,7 @@ void battle (Player *P, Enemy *M, int *menang)
 			printf("Input command : ");
 			inputactuser(&Qp);
 		}
+		getchar();
 		cr=1;
 		while (cr<=4 && cHp(*P)>0 && cHp(*M)>0)
 		{
@@ -59,11 +62,11 @@ void battle (Player *P, Enemy *M, int *menang)
 	printf("ehe");
 	if (cHp(*M)<=0)
 	{
-		(*menang)=1;
+		(*menang)=true;
 	}
 	else
 	{
-		(*menang)=0;
+		(*menang)=false;
 	}
 }
 
@@ -152,6 +155,7 @@ void printcomment(Player *P, Enemy *M,char ap, char am)
 		}
 	}
 	printf("\n");
+	printf("Push enter to continue\n");
 	getchar();
 }
 
@@ -267,14 +271,16 @@ int randomdmg (Player P, Enemy M, boolean pmenang)
 
 void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr,  char *am)
 {
-	printf("===========================================================================\n");
+	printf("=======================================================================\n");
+	printf("| ");
 	printnama(P.stat.name);
 	printf(" | LVL %d | HP %d | STR %d | DEF %d | Round %d |\n",lvl(P),cHp(P),str(P),def(P),round);
-	printf("===========================================================================\n");
+	printf("=======================================================================\n");
+	printf("| ");
 	printnama(M.stat.name);
 	printf(" | HP %d | Command ",cHp(M));
 	printactmons(Qm,randa,randb,cr,am);
-	printf("        |\n");
-	printf("===========================================================================\n");
+	printf("    |\n");
+	printf("=======================================================================\n");
 }
 
