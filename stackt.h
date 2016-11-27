@@ -59,6 +59,6 @@ void Pop (Stack * S, infotypes* X);
 /* F.S. X adalah nilai elemen TOP yang lama, TOP berkurang 1 */
 
 void ReadFileM (Stack *S, Queue *TQ, int l);
-/* */
+/* Mengisi stack dengan queue yang urutannya dirandom */
 #endif
  
