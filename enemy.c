@@ -178,8 +178,8 @@ void GetEnemy(Enemy *E, int level, int exp)
     int x;
     srand((unsigned) level*exp);
     
-    x = (rand() %5);
-    *E = ListEnemy[1];
+    x = (rand() %maxEnemy)+1;
+    *E = ListEnemy[x];
     
     GetStatEnemy(E,level);
     cHp(*E) = maxHp(*E);
