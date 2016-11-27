@@ -48,6 +48,29 @@ indeks GetLastIdxKol (MATRIKS M)
 {
     return (KolMin+NKolEff(M)-1);
 }
+
+void SearchElmt(MATRIKS M, char X, indeks *Brs, indeks *Kol)
+{
+	int i=GetFirstIdxBrs(M);
+	int j=GetFirstIdxKol(M);
+	boolean found;
+	found=false;
+	*Brs=0; *Kol=0;
+	while((i<=GetLastIdxBrs(M))&&(!found))
+	{
+			while((j<=GetLastIdxKol(M))&&(!found))
+			{
+				if(Elmt(M,i,j)==X)
+				{
+					found=true;
+					*Brs=i;
+					*Kol=j;
+				}
+				j++;
+			}
+			i++;
+	}
+}
 /* *** Selektor "DUNIA MATRIKS" *** */
 void TulisMATRIKS (MATRIKS M, int n)
 /* I.S. M terdefinisi */

@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <time.h>
 
+void MakeEmptyMap(Map *M)
+{
+	NeffMap(*M)=0;
+	CreateEmptyGraph(&Graf(*M));
+}
 void MakeNewSmall(int in, int Baris, int Kolom, int P, Map *M, indeks ordinat, indeks absis)
 {
 	int i,j,x;

@@ -37,6 +37,7 @@ typedef struct {
 #define P1(M,i)			(ElmtMap(M,i)).P1 //POINT
 #define P2(M,i)			(ElmtMap(M,i)).P2 //POINT
 #define Pintu(M,i)		(ElmtMap(M,i)).Pintu //INT
+void MakeEmptyMap(Map *M);
 void MakeNewSmall(int in, int Baris, int Kolom, int P, Map *M, indeks ordinat, indeks absis);
 /* I.S. in adalah InfoGraf untuk menyimpan map, Baris dan Kolom adalah dimensi dari map, P adalah jumlah pintu,
 		ordinat dan absis adalah pintu dari map sebelumnya 

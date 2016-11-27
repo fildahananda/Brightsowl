@@ -41,6 +41,7 @@ indeks GetLastIdxBrs (MATRIKS M);
 /* Mengirimkan indeks baris terbesar M */
 indeks GetLastIdxKol (MATRIKS M);
 /* Mengirimkan indeks kolom terbesar M */
+void SearchElmt(MATRIKS M, char X, indeks *Brs, indeks *Kol);
 void TulisMATRIKS (MATRIKS M, int n);
 /* I.S. M terdefinisi */
 /* F.S. Nilai M(i,j) ditulis ke layar per baris per kolom, masing-masing elemen per baris 
