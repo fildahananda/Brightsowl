@@ -10,22 +10,38 @@
 #include "stat.h"
 #include "stdlib.h"
 #include "mesinkata.h"
+#define maxEnemy 1
+#define maxBoss 1
+Enemy ListEnemy[maxEnemy+1];
+Enemy Boss[maxBoss+1];
 
-Enemy ListEnemy[5];
-Enemy Boss[10];
+void CreateEmptyEnemy (Enemy *P)
+{
+    *P = *(Enemy *) malloc ((1) * sizeof(Enemy));
+    lengthName(*P)=0;
+    maxHp(*P) =0;
+    str(*P) = 0;
+    def(*P) = 0;
+    strRate(*P) =0;
+    defRate(*P) = 0;
+    cHp(*P) = 0;
+    CreateEmptyQue(move(*P), 20);
+    
+}
 
-void LoadEnemy (char namaFile[])
+void LoadEnemy ()
 {
     int i,j,k;
-    STARTKATA(namaFile);
-    for(k=0;k<5; k++)
+    STARTKATA("InfoEnemy.txt");
+    for(k=1;k<=maxEnemy; k++)
     {
+        CreateEmptyEnemy(&ListEnemy[k]);
         for (i=0;i<=6 ; i++)
         {
             switch (i)
             {
                 case 0:
-                {   for(j=0; j< CKata.Length;j++)
+                {   for(j=1; j<= CKata.Length;j++)
                 {
                     tabName(ListEnemy[k])[j] = CKata.TabKata[j];
                     lengthName(ListEnemy[k]);
@@ -35,7 +51,7 @@ void LoadEnemy (char namaFile[])
                 }
                 case 1:
                 {
-                    for(j=0; j< CKata.Length;j++)
+                    for(j=1; j<= CKata.Length;j++)
                     {
                         hpRate(ListEnemy[k]) = hpRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
@@ -44,7 +60,7 @@ void LoadEnemy (char namaFile[])
                 }
                 case 2:
                 {
-                    for(j=0; j< CKata.Length;j++)
+                    for(j=1; j<= CKata.Length;j++)
                     {
                         strRate(ListEnemy[k]) = strRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
@@ -53,7 +69,7 @@ void LoadEnemy (char namaFile[])
                 }
                 case 3:
                 {
-                    for(j=0; j< CKata.Length;j++)
+                    for(j=1; j<= CKata.Length;j++)
                     {
                         defRate(ListEnemy[k]) = defRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
@@ -64,11 +80,11 @@ void LoadEnemy (char namaFile[])
                 {
                     maxM(ListEnemy[k]) = 10;
                     int idx;
-                    for (idx=0; idx <maxM(ListEnemy[k]); idx++)
+                    for (idx=1; idx <=maxM(ListEnemy[k]); idx++)
                     {
-                        for(j=0; j< CKata.Length;j++)
+                        for(j=1; j<= CKata.Length;j++)
                         {
-                            Add(&ListEnemy[k].moves[j], CKata.TabKata[j]);
+                            Add(&ListEnemy[k].moves[idx], CKata.TabKata[j]);
                         }
                         ADVKATA();
                     }
@@ -83,8 +99,9 @@ void LoadEnemy (char namaFile[])
     
     //Load boss
     
-    for(k=0;k<5; k++)
+    for(k=0;k<maxBoss; k++)
     {
+        CreateEmptyEnemy(&ListEnemy[k]);
         for (i=0;i<=6 ; i++)
         {
             switch (i)
@@ -129,11 +146,11 @@ void LoadEnemy (char namaFile[])
                 {
                     maxM(Boss[k]) = 20;
                     int idx;
-                    for (idx=0; idx <maxM(Boss[k]); idx++)
+                    for (idx=0; idx<maxM(Boss[k]); idx++)
                     {
                         for(j=0; j< CKata.Length;j++)
                         {
-                            Add(&Boss[k].moves[j], CKata.TabKata[j]);
+                            Add(&Boss[k].moves[idx], CKata.TabKata[j]);
                         }
                         ADVKATA();
                     }
@@ -149,9 +166,9 @@ void LoadEnemy (char namaFile[])
 
 void GetStatEnemy(Enemy *E, int level)
 {
-    maxHp(*E)= level*(hpRate(*E));
-    str(*E)  = level*(strRate(*E));
-    def(*E)  = level*(defRate(*E));
+    maxHp(*E)= level*(hpRate(*E)) + (level/10)*(hpRate(*E));
+    str(*E)  = level*(strRate(*E))+ (level/10)*(strRate(*E));
+    def(*E)  = level*(defRate(*E))+ (level/10)*(defRate(*E));
 }
 
 void GetEnemy(Enemy *E, int level, int exp)

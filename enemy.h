@@ -23,7 +23,9 @@ typedef struct {
 #define move(E) (E).moves
 #define maxM(E) (E).maxMoves
 
-void LoadEnemy(char namaFile[]);
+void CreateEmptyEnemy (Enemy *P);
+
+void LoadEnemy();
 
 void GetStatEnemy(Enemy *E, int level);
 

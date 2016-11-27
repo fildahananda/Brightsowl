@@ -230,6 +230,7 @@ void PrintAvailableSkill (BinTree P)
 {
     if (!(Unlock(Akar(P))))
     {
+        printf("%d ",Idx(Akar(P)));
         switch (Type(Akar(P)))
         {
             case 'h':
@@ -252,7 +253,7 @@ void PrintAvailableSkill (BinTree P)
             default:
                 break;
         }
-        printf("%d. %c%d\n",Idx(Akar(P)), Opr(Akar(P)), Rate(Akar(P)));
+        printf("%c%d\n", Opr(Akar(P)), Rate(Akar(P)));
     }
     else
     {
