@@ -26,8 +26,13 @@ void TampilanMap(Player *P, Map *M, int ind);
 void PrintKata(Kata K);
 boolean IsKataSama (Kata K1, Kata K2);
 void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *ex, boolean *logged, char *Elmt);
-//void wait(int seconds);
-
+void Menang();
+void Kalah();
+void Seri();
+void GameOver();
+void Brightsoul();
+void wait(int seconds);
+void ending(Player *P);
 boolean ex=false;
 boolean exmm;
 Player P;
@@ -36,22 +41,25 @@ boolean logged;
 Posisi Pos;
 Kata comm;
 Enemy E;
+char Elmt;
 int hasil;
+int rnd;
 int main()
 {	
 	LoadEnemy();
 	boolean logged=false;
 	CreateEmptyPlayer(&P);
 	MakeEmptyMap(&M);
+	Brightsoul();
 	while(!ex)
 	{
-		MainProgram(&ex,&P,&M,&logged);
+		MainProgram();
 	}
 return 0;
 }
 void MainProgram ()
 {
-	system("cls");
+	//system("cls");
 	exmm=false;
 	Kata command, NG, SG, LG, EX,BACK;
 	MainMenu(&command,&NG,&SG,&LG,&EX,&BACK);
@@ -265,6 +273,7 @@ void LoadGame()
 	scanf("%c",&Command);
 		if(Command=='Y')
 		{
+			GetStat(&P);
 			Game();
 		}else
 		{
@@ -277,6 +286,8 @@ void Game()
 	boolean gameover=false;
 	int hasil;
 	char Elmt;
+	boolean isFinalBattle;
+	isFinalBattle = false;
 	ex=false;
 	printf("LETS PLAY ");
 	PrintNama(name(P));
@@ -297,20 +308,94 @@ void Game()
 			if(Elmt=='E')
 			{
 				GetEnemy(&E,lvl(P),exp(P));
-				printf("%d\n",hpRate(E));
 			}else
 			{
-				printf("THE BOSS IS COMING\n");
-				GetBoss(&E,lvl(P),exp(P));
+				if(Kanan(Area(Pos))==Nil)
+				{
+					printf("THE BIG BOSS IS COMING\n");
+					GetBigBoss(&E, lvl(P));
+					isFinalBattle = true;
+				}
+				else
+				{
+					printf("THE BOSS IS COMING\n");
+					GetBoss(&E,lvl(P),exp(P));
+				}
 			}
-			battle(&P,&E,&hasil);
-			//switch (hasil){
-			//	case 1: Menang(); break;
-			//	case 2: Kalah(); break;
-			//	case 3: Seri(); break;
-			//	default: GameOver(); gameover=true; break;
+			GetStat(&P);
+			battle(&P,&E,&hasil,&rnd);
+			switch (hasil){
+				case 1: Menang();
+				{ if (isFinalBattle)
+					{
+						ending(&P);
+					}
+					else
+					{
+					AddExp(&P,rnd,maxM(E));
+					printf("Congratulation for your win\n");
+					}
+					isFinalBattle = false;
+				if(credit(P)>0)
+				{
+					char Command;
+					int x;
+					while ((credit(P)>0)&&(Command!='N'))
+					{
+						printf("Do you wanna unlock some skill? Y or N?\n");
+						printf("Available Credit(s): %d \n",credit(P));
+						scanf("%c",&Command);
+						if(Command=='Y')
+						{
+							printf("Skill yang dapat dipilih:\n");
+							
+							PrintAvailableSkill(skill(P));
+							
+							printf("Input indeks skill yang diinginkan\n");
+							scanf("%d",&x);
+							UnlockSkill(&P,x);
+							GetStat(&P);
+						}
+					}
+					
+				}
+				break;
+				}
+				case 2: Kalah(); exmm=true; break;
+				case 3: Seri(); break;
+				default: break;
 			}
+		}else if(Elmt=='M')
+		{
+			printf("Kamu menemukan Obat, jika kamu mengamilnya HP kamu akan kembali penuh\n");
+			printf("Ambil? Y or N?\n");
+			char Command;
+			scanf("%c",&Command);
+				if(Command=='Y')
+				{
+					cHp(P)=100;
+				}else
+				{
+						if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))=='-')
+						{
+							MoveUp(&Pos,&M,&Elmt);
+							Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))='M';
+						}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))=='-')
+						{
+							MoveDown(&Pos,&M,&Elmt);
+							Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))='M';
+						}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))=='-')
+						{
+							MoveRight(&Pos,&M,&Elmt);
+							Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))='M';
+						}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))=='-')
+						{
+							MoveLeft(&Pos,&M,&Elmt);
+							Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))='M';
+						}
+				}
 		}
+	}
 }
 
 Posisi SearchPosisi(Map M)
@@ -597,9 +682,117 @@ void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *exmm, boolean *logg
 		*exmm=true;
 	}
 }
-//void wait(int seconds)
-//{
-//	clock_t tunggu;
-//	tunggu=clock()+seconds*CLOCKS_PER_SEC;
-//	while(clock() <tunggu){}
-//}
+void Menang() {
+	printf("[]    [] [][][][] []    []     []  []  [] [] [][]    []\n");
+	printf(" []  []  []    [] []    []     []  []  [] [] [] []   []\n");
+	printf("  [][]   []    [] []    []     []  []  [] [] []  []  []\n");
+	printf("   []    []    [] []    []     []  []  [] [] []   [] []\n");
+	printf("   []    [][][][]  [][][]       [][][][]  [] []    [][]\n");
+}
+
+void Kalah() {
+	printf("[]    [] [][][][] []    []     []       [][][][] [][][] [][][]\n");
+	printf(" []  []  []    [] []    []     []       []    [] []     []\n");
+	printf("  [][]   []    [] []    []     []       []    [] [][][] [][]\n");
+	printf("   []    []    [] []    []     []       []    []     [] []\n");
+	printf("   []    [][][][]  [][][]      [][][][] [][][][] [][][] [][][]\n");
+	if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))=='-')
+	{
+		MoveUp(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))=='-')
+	{
+		MoveDown(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))=='-')
+	{
+		MoveRight(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))=='-')
+	{
+		MoveLeft(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))='E';
+	}
+}
+
+void Seri() {
+	printf("[][][][]  [][][]   [][]  [][][][]  [][][]\n");
+	printf("[]       []    []  [][]  []       []    []\n");
+	printf("[][][][] []    []        [][][][] []    []\n");
+	printf("      [] []    []  [][]        [] []    []\n");
+	printf("[][][][]  [][][]   [][]  [][][][]  [][][]\n");
+	if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))=='-')
+	{
+		MoveUp(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))-1),Absis(Titik(Pos)))=='-')
+	{
+		MoveDown(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))+1),Absis(Titik(Pos)))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))=='-')
+	{
+		MoveRight(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))='E';
+	}else if(Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))-1))=='-')
+	{
+		MoveLeft(&Pos,&M,&Elmt);
+		Elmt(SmallMap(M,InfoGraf(Area(Pos))),(Ordinat(Titik(Pos))),(Absis(Titik(Pos))+1))='E';
+	}
+}
+	
+void GameOver() {
+	printf("[][][][]                                    [][][][]                     [][][]\n");
+	printf("[]           []     [][]  [][] [][][][]     []    [] []      [] [][][][] []   []\n");
+	printf("[]          [][]    [] [][] [] []           []    []  []    []  []       [][][]\n");
+	printf("[]  [][]   []  []   []  []  [] [][][]       []    []   []  []   [][][]   [] []\n");
+	printf("[]    []  [][][][]  []      [] []           []    []    [][]    []       []  []\n");
+	printf("[][][][] []      [] []      [] [][][][]     [][][][]     []     [][][][] []   []\n");
+	
+	printf("\n");
+	printf("\n");
+	
+	printf("[]    [] [][][][] []    []     [][][][]  [] [][][]\n");
+	printf(" []  []  []    [] []    []     []     [] [] []\n");
+	printf("  [][]   []    [] []    []     []     [] [] [][]\n");
+	printf("   []    []    [] []    []     []     [] [] []\n");
+	printf("   []    [][][][]  [][][]      [][][][]  [] [][][]\n");
+}
+
+void Brightsoul()
+{
+	char c;
+   	printf("######  ######  ###  #####  ##   ## #######  #####   #####  ##   ## ##        ===    ===   \n");
+	printf("##   ## ##   ## ### ##   ## ##   ## ####### ##   ## ##   ## ##   ## ##      ============== \n");
+	printf("##   ## ##   ## ### ##      ##   ##   ###    ##     ##   ## ##   ## ##      ============== \n");
+	printf("######  #####   ### ##  ### #######   ###     ###   ##   ## ##   ## ##       ============  \n");
+	printf("##   ## ##  ##  ### ##   ## ##   ##   ###       ##  ##   ## ##   ## ##         ========    \n");
+	printf("##   ## ##   ## ### ##   ## ##   ##   ###   ##   ## ##   ## ##   ## ##           ====      \n");
+	printf("######  ##   ## ###  #####  ##   ##   ###    #####   #####   #####  #######       ==       \n");
+	printf("---------------------------------Candra Hesen P. <13515019>--------------------------------\n");
+	printf("-------------------------------Lathifah Nurrahmah  <13515046>------------------------------\n");
+	printf("---------------------------------Richard Matthew <13515094>--------------------------------\n");
+	printf("---------------------------------Harum Lokawati  <13515109>--------------------------------\n");
+	printf("--------------------------------Fildah Ananda A. <135150127>-------------------------------\n");
+	scanf("%c",&c);
+	system("cls");
+}
+void wait(int seconds)
+{
+	clock_t tunggu;
+	tunggu=clock()+seconds*CLOCKS_PER_SEC;
+	while(clock() <tunggu){
+	}
+}
+
+void ending(Player *P)
+{
+	system("cls");
+	printf("CONGRATULATION ");
+	PrintNama(name(*P));
+	printf("!! YOU HAVE COMPLETED THE GAME\n");
+	printf("Credits :\n");
+	Brightsoul();
+	MainProgram();
+}
+
+

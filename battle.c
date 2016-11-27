@@ -11,7 +11,7 @@
 
 /* PROCEDURE BATTLE */
 
-void battle (Player *P, Enemy *M, int *menang)
+void battle (Player *P, Enemy *M, int *menang, int *rnd)
 {
 	/*KAMUS*/
 	int round, randa, randb, cr;
@@ -48,7 +48,7 @@ void battle (Player *P, Enemy *M, int *menang)
 			inputactuser(&Qp);
 			printf("\n");
 		}
-		getchar();
+		//getchar();
 		cr=1;
 		while (cr<=4 && cHp(*P)>0 && cHp(*M)>0)
 		{
@@ -73,6 +73,7 @@ void battle (Player *P, Enemy *M, int *menang)
 	{
 		(*menang)=3;
 	}
+	*rnd=round;
 }
 
 void printcomment(Player *P, Enemy *M,char ap, char am)

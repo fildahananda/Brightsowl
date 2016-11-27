@@ -206,6 +206,7 @@ void MakeMap(int Baris, int Kolom, int N, Map *P)
 		InsertKanan(&Graf(*P),i);
 	}
 	RandomEnemy(P);
+	RandomObat(P);
 }
 
 void RandomEnemy (Map *M)
@@ -318,3 +319,23 @@ void BacaMap (Map *M,char filename[])
 	NeffMap(*M)=i-1;
 }
 
+void RandomObat (Map *M)
+{
+	int i,j,E;
+	indeks b,k;
+	for(i=1;i<=NeffMap(*M);i++)
+	{
+		E=1;
+		j=1;
+		while(j<=E)
+		{
+			b=rand()%NBrsEff(SmallMap(*M,i))+1;
+			k=rand()%NKolEff(SmallMap(*M,i))+1;
+			if(Elmt(SmallMap(*M,i),b,k)=='-')
+			{
+				Elmt(SmallMap(*M,i),b,k)='M';
+				j++;
+			}
+		}
+	}
+}

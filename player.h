@@ -56,8 +56,6 @@ void LevelUp(Player *P);
 
 void UnlockSkill(Player *P,int X);
 
-void PrintStat(Player *P);
-
 void GetStat(Player *P);
 
 void PrintInfoPlayer(Player *P);

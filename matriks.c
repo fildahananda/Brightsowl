@@ -96,7 +96,7 @@ void TulisMATRIKS (MATRIKS M, int n)
                 {
 					if(Elmt(M,i,j)=='B')
 					{
-						printf("\x1b[31m""E\n""\x1b[0m");
+						printf("E\n");
 					}else
 					{
 					    printf("%c\n",Elmt(M,i,j));	
@@ -106,7 +106,7 @@ void TulisMATRIKS (MATRIKS M, int n)
                 {
                     if(Elmt(M,i,j)=='B')
 					{
-						printf("\x1b[31m""E""\x1b[0m");
+						printf("E");
 					}else
 					{
 					    printf("%c",Elmt(M,i,j));	
@@ -119,7 +119,7 @@ void TulisMATRIKS (MATRIKS M, int n)
                 {
                     if(Elmt(M,i,j)=='B')
 					{
-						printf("\x1b[31m""E\n""\x1b[0m");
+						printf("E\n");
 					}else
 					{
 					    printf("%c\n",Elmt(M,i,j));	
@@ -129,7 +129,7 @@ void TulisMATRIKS (MATRIKS M, int n)
                 {
                     if(Elmt(M,i,j)=='B')
 					{
-						printf("\x1b[31m""E""\x1b[0m");
+						printf("E");
 					}else
 					{
 					    printf("%c",Elmt(M,i,j));	

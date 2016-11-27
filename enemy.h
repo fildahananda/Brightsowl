@@ -33,4 +33,6 @@ void GetEnemy(Enemy *E, int level, int exp);
 
 void GetBoss(Enemy *E, int level, int exp);
 
+void GetBigBoss(Enemy *E, int level);
+
 #endif /* enemy_h */

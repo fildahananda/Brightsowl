@@ -64,4 +64,5 @@ void SimpanMap(Map *M, char filename[]);
 void BacaMap (Map *M,char filename[]);
 /* I.S. Map *M kosong/terisi 
    F.S. Mengisi Map M dari file "filename" yang telah dibaca*/
+void RandomObat (Map *M);
  #endif

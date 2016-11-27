@@ -73,11 +73,9 @@ void ReadPlayer (Player *P, char namaFile[])
 
 				for(j=1; j<= CKata.Length;j++)
                 {
-					printf("%c",CKata.TabKata[j]);
                     exp(*P) =  exp(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
                 }
-				printf("%d",exp(*P));
-                ADVKATA();
+				ADVKATA();
                 break;
             }
             case 2:
@@ -86,7 +84,6 @@ void ReadPlayer (Player *P, char namaFile[])
                 {
                     lvl(*P) = lvl(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
 					
-				printf("vl%d", lvl(*P));
 				}
                 ADVKATA();
                 break;
@@ -194,18 +191,11 @@ void AddExp(Player *P, int round, int max)
     int x;
     exp(*P) = (50*(max - round +1)) + exp(*P) ;
     
-    while (exp(*P)>maxExp)
+    while ((exp(*P)>maxExp)&&(lvl(*P)<maxLvl))
     {
         exp(*P)-= maxExp;
         LevelUp(P);
         
-    }
-    if (credit(*P) !=0)
-    {
-        PrintAvailableSkill(skill(*P));
-        printf("Input indeks dari skill yang diinginkan\n");
-        scanf("%d",&x);
-        UnlockSkill(P, x);
     }
     GetStat(P);
     cHp(*P)     = maxHp(*P);
@@ -221,7 +211,7 @@ void LevelUp (Player *P)
             hpRate(*P)   += lvl(*P)*100;
             strRate(*P)    += 20*((lvl(*P)%10)+1);
             defRate(*P)    += 20*((lvl(*P)%10)+1);
-            if ((lvl(*P) % 3)== 0)
+            if (((lvl(*P) % 3)== 0) &&(lvl(*P)<48))
             {
                 credit(*P)++;
             }
@@ -242,10 +232,12 @@ void UnlockSkill(Player *P,int X)
         credit(*P)--;
         
     }
+	else
+	{
+		printf("Input salah\n");
+	}
     
 }
-void PrintStat(Player *P);
-
 void GetStat(Player *P)
 {
     BinTree T;
@@ -353,5 +345,4 @@ void PrintNama(Name K)
     {
         printf("%c",K.TabKata[i]);
     }
-    printf("\n");
 }

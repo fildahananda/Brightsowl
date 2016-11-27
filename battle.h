@@ -12,7 +12,7 @@
 #include "player.h"
 
 
-void battle (Player *P, Enemy *M, int *menang);
+void battle (Player *P, Enemy *M, int *menang, int *rnd);
 /*I.S. Menerima variabel Player dan Enemy 
  * F.S. Membuat tampilan battle dan mengolah perhitungan damage*/
 
