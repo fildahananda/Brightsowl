@@ -25,7 +25,7 @@ void CreateEmptyEnemy (Enemy *P)
     strRate(*P) =0;
     defRate(*P) = 0;
     cHp(*P) = 0;
-    CreateEmptyQue(move(*P), 20);
+    CreateEmptyQue(&move(*P)[1], 4);
     
 }
 
@@ -82,6 +82,7 @@ void LoadEnemy ()
                     int idx;
                     for (idx=1; idx <=maxM(ListEnemy[k]); idx++)
                     {
+                        CreateEmptyQue(&move(ListEnemy[k] )[idx], 4);
                         for(j=1; j<= CKata.Length;j++)
                         {
                             Add(&ListEnemy[k].moves[idx], CKata.TabKata[j]);
@@ -148,6 +149,7 @@ void LoadEnemy ()
                     int idx;
                     for (idx=0; idx<maxM(Boss[k]); idx++)
                     {
+                        CreateEmptyQue(&move(Boss[k] )[idx], 4);
                         for(j=0; j< CKata.Length;j++)
                         {
                             Add(&Boss[k].moves[idx], CKata.TabKata[j]);
@@ -166,9 +168,9 @@ void LoadEnemy ()
 
 void GetStatEnemy(Enemy *E, int level)
 {
-    maxHp(*E)= level*(hpRate(*E)) + (level/10)*(hpRate(*E));
-    str(*E)  = level*(strRate(*E))+ (level/10)*(strRate(*E));
-    def(*E)  = level*(defRate(*E))+ (level/10)*(defRate(*E));
+    maxHp(*E)= level*level*(hpRate(*E)/10) + (level/6)*(hpRate(*E));
+    str(*E)  = level*level*(strRate(*E)/10)+ (level/6)*(strRate(*E));
+    def(*E)  = level*level*(defRate(*E)/10)+ (level/6)*(defRate(*E));
 }
 
 void GetEnemy(Enemy *E, int level, int exp)
@@ -177,7 +179,7 @@ void GetEnemy(Enemy *E, int level, int exp)
     srand((unsigned) level*exp);
     
     x = (rand() %5);
-    *E = ListEnemy[x];
+    *E = ListEnemy[1];
     
     GetStatEnemy(E,level);
     cHp(*E) = maxHp(*E);

@@ -20,6 +20,7 @@ void CreateEmptyPlayer (Player *P)
     def(*P) = 0;
     strRate(*P) =0;
     defRate(*P) = 0;
+    hpRate(*P) =0;
     cHp(*P) = 0;
     credit(*P) = 0;
     
@@ -182,14 +183,28 @@ void SimpanPlayer(Player *P, char filename[])
     fclose(pita);
 }
 
-void AddExp(Player *P, int round)
+void AddExp(Player *P, int round, int max)
 {
-    int temp;
-    temp = (50*(maxRound - round)) + exp(*P) ;
-    if (temp >= maxExp)
+    int x;
+    exp(*P) = (50*(max - round +1)) + exp(*P) ;
+    
+    while (exp(*P)>maxExp)
     {
+        exp(*P)-= maxExp;
         LevelUp(P);
+        
     }
+    if (credit(*P) !=0)
+    {
+        PrintAvailableSkill(skill(*P));
+        printf("Input indeks dari skill yang diinginkan\n");
+        scanf("%d",&x);
+        UnlockSkill(P, x);
+    }
+    GetStat(P);
+    cHp(*P)     = maxHp(*P);
+
+
 }
 
 void LevelUp (Player *P)
@@ -209,8 +224,6 @@ void LevelUp (Player *P)
         {
             printf("Kamu sudah mencapai level maksimum\n");
         }
-    GetStat(P);
-    cHp(*P)     = maxHp(*P);
 }
 
 void UnlockSkill(Player *P,int X)

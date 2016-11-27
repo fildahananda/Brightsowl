@@ -18,7 +18,6 @@
 #define maxLvl 50
 #define minExp 0
 #define maxExp 1000
-#define maxRound 20
 
 typedef struct {
     Stat stat;
@@ -43,7 +42,7 @@ void SimpanPlayer(Player *P, char filename[]);
 
 void ReadPlayer (Player *P, char namaFile[]);
 
-void AddExp(Player *P, int round);
+void AddExp(Player *P, int round, int max);
 
 void AddHp(Player *P);
 
