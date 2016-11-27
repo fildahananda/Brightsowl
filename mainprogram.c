@@ -10,29 +10,67 @@
 #include "point.h"
 
 void MainProgram ();
+/*Menampilkan menu utama dan menerima input command di menu utama*/
 void TampilanMainMenu();
+/*Tampilan Menu Utama*/
 void MainMenu(Kata *comm, Kata *NG, Kata *SG, Kata *LG, Kata *EX, Kata *BACK);
+/*comm NG SG LG EX BACK adalah kata yang dibuat di MainMenu dan digunakan untuk mengecek input */
 void NewGame();
+/*New Game akan melakukan verifikasi apakah ingin membuat akun baru dan menghapus load lama,
+jika Y, maka akan membuat player baru dan map baru, lalu diberi pilihan untuk lanjut memainkan game atau tidak, 
+jika tidak, akan kembali ke Main program/mainmenu*/
 void StartGame();
+/*StartGame akan mengecek, jika user telah logged(membuat akun baru atau load) maka akan langsung main,
+jika tidak akan diberi pilihan untuk new game atau load game*/
 void LoadGame();
+/*Me-load file savedplayer.txt dan map.txt*/
 void Game();
+/*Memulai Game dengan menampilkan tampilan map, juga battle*/
 Posisi SearchPosisi(Map M);
+/*Melakukan pencarian posisi pemain pada map*/
 void RandomPosisi(Map *M, int i,Posisi *P);
+/*I.S. Map tidak kosong, i adalah Info indeks map, P sembarang
+  F.S. merandom indeks posisi P, dan mengisi elemen matriks map dengan indeks tsb dengan 'P'*/
 void MoveUp(Posisi *P, Map *M, char *Elmt);
+/*I.S. Map tidak kosong, P posisi yang valid(berada di Map), Elmt sembarang
+  F.S. jika element indeks baris diatas Posisinya bukan # maka posisi P akan berganti indeks ke atas,
+		Elmt adalah Info Elmt matriks dari map pada indeks yang sama dengan posisi*/
 void MoveDown(Posisi *P, Map *M, char *Elmt);
+/*I.S. Map tidak kosong, P posisi yang valid(berada di Map), Elmt sembarang
+  F.S. jika element indeks baris dibawah Posisinya bukan # maka posisi P akan berganti indeks ke bawah,
+		Elmt adalah Info Elmt matriks dari map pada indeks yang sama dengan posisi*/
 void MoveRight(Posisi *P, Map *M, char *Elmt);
+/*I.S. Map tidak kosong, P posisi yang valid(berada di Map), Elmt sembarang
+  F.S. jika element indeks kolom dikanan Posisinya bukan # maka posisi P akan berganti indeks ke kanan,
+		Elmt adalah Info Elmt matriks dari map pada indeks yang sama dengan posisi*/
 void MoveLeft(Posisi *P, Map *M, char *Elmt);
+/*I.S. Map tidak kosong, P posisi yang valid(berada di Map), Elmt sembarang
+  F.S. jika element indeks kolom di kiri Posisinya bukan # maka posisi P akan berganti indeks ke kiri,
+		Elmt adalah Info Elmt matriks dari map pada indeks yang sama dengan posisi*/
 void TampilanMap(Player *P, Map *M, int ind);
+/*I.S. P valid, M tidak kosong, ind adalah indeks Map
+  F.S. Menampilkan NAMA, HP, EXP, DEF, STR dari player, menampilkan map saat ini*/
 void PrintKata(Kata K);
+/*I.S. length kata bukan 0
+  F.S. Mencetak kata */
 boolean IsKataSama (Kata K1, Kata K2);
+/*mengembalikan true jika K1=K2*/
 void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *ex, boolean *logged, char *Elmt);
+/*I.S. Map tidak kosong, Pos posisi yang valid(berada di Map), P tidak kosong, ex,logged, Elmt sembarang
+  F.S. membaca command dari user yaitu GU, GD, GR, GL, SKILL, EXIT, SAVE, LOAD */
 void Menang();
+/*menampilkan posedur jika menang*/
 void Kalah();
+/*menampilkan posedur jika kalah*/
 void Seri();
+/*menampilkan posedur jika seri*/
 void GameOver();
+/*menampilkan posedur jika game over (tidak digunakan)*/
 void Brightsoul();
+/*menampilkan nama game dan credit*/
 void wait(int seconds);
 void ending(Player *P);
+/*tampilan saat berhasil menang lawan big boss*/
 boolean ex=false;
 boolean exmm;
 Player P;
