@@ -4,6 +4,7 @@
 #include "enemy.h"
 #include "player.h"
 #include "stat.h"
+#include "boolean.h"
 
 void scanname(Name *A);
 
@@ -13,21 +14,22 @@ int main()
 	Enemy E;
 	int l,j,p;
 	Queue Qt;
+	int menang;
 	char n;
 	
 	printf("nama player: ");
-	scanname(&(P.stat.name));
+	scanname(&(name(P)));
 	strRate(P)=20;
 	defRate(P)=20;
 	hpRate(P)=10;
 	maxHp(P)=200;
 	cHp(P)=200;
 	str(P)=30;
-	def(P)=30;
+	def(P)=60;
 	exp(P)=0;
 	lvl(P)=2;
 	printf("nama enemy: ");
-	scanname(&(E.stat.name));
+	scanname(&(name(E)));
 	strRate(E)=20;
 	defRate(E)=20;
 	hpRate(E)=10;
@@ -47,8 +49,20 @@ int main()
 		}
 		move(E)[l]=Qt;
 	}
-	maxm(E)=p;
-	battle(&P,&E);
+	maxM(E)=p;
+	battle(&P,&E,&menang);
+	if (menang==1)
+	{
+		printf("Player menang\n");
+	}
+	else if (menang==2)
+	{
+		printf("Player kalah\n");
+	}
+	else
+	{
+		printf("Seri\n");
+	}
 }
 
 void scanname(Name *A)
@@ -60,8 +74,8 @@ void scanname(Name *A)
 	do
 	{
 		scanf("%c",&c);
-		(*A).tabName[i]=c;
+		(*A).TabKata[i]=c;
 		i++;
 	}while (c!='\n' && c!= '\r');
-	(*A).length=i-2;
+	(*A).Length=i-2;
 }
