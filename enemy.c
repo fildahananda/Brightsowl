@@ -14,18 +14,7 @@
 Enemy ListEnemy[5];
 Enemy Boss[10];
 
-void LoadEnemy ()
-{
-    char namaFile[1000];
-    namaFile[0] = '"';
-    namaFile[1] = 'L';
-    namaFile[2] = 'E';
-    namaFile[3] = '"';
-    
-    ReadEnemy(&namaFile[1000]);
-    
-}
-void ReadEnemy (char namaFile[1000])
+void LoadEnemy (char namaFile[])
 {
     int i,j,k;
     STARTKATA(namaFile);
@@ -73,9 +62,9 @@ void ReadEnemy (char namaFile[1000])
                 }
                 case 4:
                 {
-                    ListEnemy[k].maxMoves = 10;
+                    maxM(ListEnemy[k]) = 10;
                     int idx;
-                    for (idx=0; idx <ListEnemy[k].maxMoves; idx++)
+                    for (idx=0; idx <maxM(ListEnemy[k]); idx++)
                     {
                         for(j=0; j< CKata.Length;j++)
                         {
@@ -103,8 +92,8 @@ void ReadEnemy (char namaFile[1000])
                 case 0:
                 {   for(j=0; j< CKata.Length;j++)
                 {
-                    tabName(ListEnemy[k])[j] = CKata.TabKata[j];
-                    lengthName(ListEnemy[k]);
+                    tabName(Boss[k])[j] = CKata.TabKata[j];
+                    lengthName(Boss[k]);
                 }
                     ADVKATA();
                     break;
@@ -113,7 +102,7 @@ void ReadEnemy (char namaFile[1000])
                 {
                     for(j=0; j< CKata.Length;j++)
                     {
-                        hpRate(ListEnemy[k]) = hpRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
+                        hpRate(Boss[k]) = hpRate(Boss[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
                     ADVKATA();
                     break;
@@ -122,7 +111,7 @@ void ReadEnemy (char namaFile[1000])
                 {
                     for(j=0; j< CKata.Length;j++)
                     {
-                        strRate(ListEnemy[k]) = strRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
+                        strRate(Boss[k]) = strRate(Boss[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
                     ADVKATA();
                     break;
@@ -131,20 +120,20 @@ void ReadEnemy (char namaFile[1000])
                 {
                     for(j=0; j< CKata.Length;j++)
                     {
-                        defRate(ListEnemy[k]) = defRate(ListEnemy[k])*10 + ((int) (CKata.TabKata[j]-'0'));
+                        defRate(Boss[k]) = defRate(Boss[k])*10 + ((int) (CKata.TabKata[j]-'0'));
                     }
                     ADVKATA();
                     break;
                 }
                 case 4:
                 {
-                    ListEnemy[k].maxMoves = 10;
+                    maxM(Boss[k]) = 20;
                     int idx;
-                    for (idx=0; idx <ListEnemy[k].maxMoves; idx++)
+                    for (idx=0; idx <maxM(Boss[k]); idx++)
                     {
                         for(j=0; j< CKata.Length;j++)
                         {
-                            Add(&ListEnemy[k].moves[j], CKata.TabKata[j]);
+                            Add(&Boss[k].moves[j], CKata.TabKata[j]);
                         }
                         ADVKATA();
                     }
@@ -158,7 +147,7 @@ void ReadEnemy (char namaFile[1000])
     }
 }
 
-void GetStat(Enemy *E, int level)
+void GetStatEnemy(Enemy *E, int level)
 {
     maxHp(*E)= level*(hpRate(*E));
     str(*E)  = level*(strRate(*E));
@@ -173,7 +162,20 @@ void GetEnemy(Enemy *E, int level, int exp)
     x = (rand() %5);
     *E = ListEnemy[x];
     
-    GetStat(E,level);
+    GetStatEnemy(E,level);
+    cHp(*E) = maxHp(*E);
+    
+}
+
+void GetBoss(Enemy *E, int level, int exp)
+{
+    int x;
+    srand((unsigned) level*exp);
+    
+    x = (rand() %5);
+    *E = Boss[x];
+    
+    GetStatEnemy(E,level*2);
     cHp(*E) = maxHp(*E);
     
 }

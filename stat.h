@@ -8,10 +8,12 @@
 
 #ifndef stat_h
 #define stat_h
+#define NMax 100
+
 typedef struct {
-    char tabName[100];
-    int length;
-}Name;
+    char TabKata[NMax+1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
+    int Length;
+} Name;
 typedef struct {
     Name name;
     int strRate;
@@ -23,8 +25,9 @@ typedef struct {
     int def;
 } Stat;
 
-#define tabName(P) (P).stat.name.tabName
-#define lengthName(P) (P).stat.name.length
+#define tabName(P) (P).stat.name.TabKata
+#define lengthName(P) (P).stat.name.Length
+#define name(P) (P).stat.name
 #define strRate(P) (P).stat.strRate
 #define defRate(P) (P).stat.defRate
 #define hpRate(P) (P).stat.hpRate

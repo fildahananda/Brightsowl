@@ -26,17 +26,22 @@ typedef struct {
     int cHp;
     int exp;
     int lvl;
+    int credit;
 } Player;
 
 #define exp(P) (P).exp
 #define lvl(P) (P).lvl
 #define skill(P) (P).skill
+#define credit(P) (P).credit
+void CreateEmptyPlayer (Player *P);
 
 void LoadPlayer (Player *P);
 
 void LoadNewPlayer (Player *P);
 
-void ReadPlayer (Player *P, char namaFile[1000]);
+void SimpanPlayer(Player *P, char filename[]);
+
+void ReadPlayer (Player *P, char namaFile[]);
 
 void AddExp(Player *P, int round);
 
@@ -48,11 +53,15 @@ void AddDef(Player *P);
 
 void LevelUp(Player *P);
 
-void UnlockSkill(Player *P,char X);
+void UnlockSkill(Player *P,int X);
 
 void PrintStat(Player *P);
 
-void PrintSkill(Player *P);
+void GetStat(Player *P);
+
+void PrintInfoPlayer(Player *P);
+
+void PrintNama(Name K);
 
 
 

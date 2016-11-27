@@ -21,10 +21,14 @@ typedef struct {
 } Enemy;
 
 #define move(E) (E).moves
+#define maxM(E) (E).maxMoves
 
-void LoadEnemy();
+void LoadEnemy(char namaFile[]);
 
-void ReadEnemy (char namaFile[1000]);
-void GetStat(Enemy *E, int level);
+void GetStatEnemy(Enemy *E, int level);
+
+void GetEnemy(Enemy *E, int level, int exp);
+
+void GetBoss(Enemy *E, int level, int exp);
 
 #endif /* enemy_h */
