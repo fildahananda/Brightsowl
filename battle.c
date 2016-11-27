@@ -9,17 +9,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* PROCEDURE BATTLE */
 
-void battle (Player *P, Enemy *M, boolean *menang)
-/*KAMUS LOKAL
- *Stack S (untuk mengacak action monster)*/
+void battle (Player *P, Enemy *M, int *menang)
 {
+	/*KAMUS*/
 	int round, randa, randb, cr;
 	Queue Qp,Qm;
 	Stack S;
-	char am,ap,nu;
+	char am,ap;
 	time_t t;
 	
+	/*ALGORITMA*/
 	srand((unsigned) time(&t));
     randa=((rand()%4)+1);
     do
@@ -29,7 +30,7 @@ void battle (Player *P, Enemy *M, boolean *menang)
 	while (randb==randa);
 	round=1;
 	cHp(*M)=maxHp(*M);
-	ReadFileM(&S,move(*M),maxm(*M));
+	ReadFileM(&S,move(*M),maxM(*M));
 	while (cHp(*P)>0 && cHp(*M)>0 && !IsEmptyStack(S))
 	{
 		CreateEmptyQue(&Qp,4);
@@ -37,7 +38,7 @@ void battle (Player *P, Enemy *M, boolean *menang)
 		cr=0;
 		while (!IsFullQue(Qp))
 		{
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" attacked!\n");
 			cetakbattle(*P,*M,Qp,Qm,round,randa,randb,cr,&am);
 			printf("Inputted command: ");
@@ -45,6 +46,7 @@ void battle (Player *P, Enemy *M, boolean *menang)
 			printf("\n");
 			printf("Input command : ");
 			inputactuser(&Qp);
+			printf("\n");
 		}
 		getchar();
 		cr=1;
@@ -59,43 +61,48 @@ void battle (Player *P, Enemy *M, boolean *menang)
 		}
 		round++;
 	}
-	printf("ehe");
 	if (cHp(*M)<=0)
 	{
-		(*menang)=true;
+		(*menang)=1;
+	}
+	else if (cHp(*P)<=0)
+	{
+		(*menang)=2;
 	}
 	else
 	{
-		(*menang)=false;
+		(*menang)=3;
 	}
 }
 
 void printcomment(Player *P, Enemy *M,char ap, char am)
 {
+	/*KAMUS*/
 	int dmg;
 	
+	/*ALGORITMA*/
 	if (ap=='A')
 	{
 		if (am=='B')
 		{
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" attacked! But ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" blocked!");
 		}
 		else if (am=='A')
 		{
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" tries to attack! But ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" evaded!");
 		}
 		else if (am=='F')
 		{
 			dmg=randomdmg(*P,*M,true);
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" attacked! ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" -%d HP",dmg);
 			cHp(*M)-=dmg;
 		}
@@ -104,24 +111,24 @@ void printcomment(Player *P, Enemy *M,char ap, char am)
 	{
 		if (am=='A')
 		{
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" attacked! But ");
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" blocked!");
 		}
 		else if (am=='B')
 		{
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" Blocked. ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" blocked too. Nothing happened.");
 		}
 		else if (am=='F')
 		{
 			dmg=randomdmg(*P,*M,false);
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" blocked! but ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" is too strong. HP-%d",dmg);
 			cHp(*P)-=dmg;
 		}
@@ -131,25 +138,25 @@ void printcomment(Player *P, Enemy *M,char ap, char am)
 		if (am=='B')
 		{
 			dmg=randomdmg(*P,*M,true);
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" blocked! but ");
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" is too strong. HP-%d",dmg);
 			cHp(*M)-=dmg;
 		}
 		else if (am=='F')
 		{
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" and ");
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" both flocked. Nothing happened.");
 		}
 		else if (am=='A')
 		{
 			dmg=randomdmg(*P,*M,false);
-			printnama((*M).stat.name);
+			PrintNama(name(*M));
 			printf(" attacked! ");
-			printnama((*P).stat.name);
+			PrintNama(name(*P));
 			printf(" -%d HP",dmg);
 			cHp(*P)-=dmg;
 		}
@@ -159,25 +166,14 @@ void printcomment(Player *P, Enemy *M,char ap, char am)
 	getchar();
 }
 
-void printnama(Name A)
-{
-	int i;
-	
-	for (i=0; i<=A.length; i++)
-	{
-		printf("%c",A.tabName[i]);
-	}
-}
-
-
-
-
 void printactuser(Queue Q, int cr, char *ap)
 {
+	/*KAMUS*/
 	Queue Qs;
 	char ch;
 	int p;
 	
+	/*ALGORITMA*/
 	Qs=Q;
 	if (!IsFullQue(Q))
 	{
@@ -206,9 +202,11 @@ void printactuser(Queue Q, int cr, char *ap)
 
 void printactmons(Queue Q, int a, int b, int cr,char *am)
 {
+	/*KAMUS*/
 	char ch;
 	int p;
 	
+	/*ALGORITMA*/
 	p=1;
 	while (p<=4)
 	{
@@ -231,53 +229,63 @@ void printactmons(Queue Q, int a, int b, int cr,char *am)
 }
  
 void inputactuser (Queue *Q)
-/*I.S Menerima aksi user
- *F.S Memasukkan aksi user pada round*/
 {
+	/*KAMUS*/
 	char c,temp;
 	
-		scanf(" %c",&c);
-		if (c=='E')
+	/*ALGORITMA*/
+	scanf(" %c",&c);
+	if (c=='E')
+	{
+		if (!IsEmptyQue(*Q))
 		{
-			if (!IsEmptyQue(*Q))
-			{
-				Del(Q,&temp);
-			}
+			Del(Q,&temp);
 		}
+	}
 		else if (c=='A' || c=='B' || c=='F')
-		{
-			Add(Q,c);
-		}
+	{
+		Add(Q,c);
+	}
 }
  
 int randomdmg (Player P, Enemy M, boolean pmenang)
-/*I.S Menerima data dari monster, player, dan kebenaran apakah player menang atau tidak
- * F.S Menghasilkan nilai damage dan mengurangi HP yang kalah*/
 {
-	int at,df;
+	/*KAMUS*/
+	int at,df,dmg;
 	
-		if (pmenang)
-		{
-			at = str(P);
-			df = def(M);
-		}
-		else
-		{
-			at = str(M);
-			df = def(P);
-		}
-		return ((rand()%13)+(at*4)-(df*3));
+	/*ALGORITMA*/
+	if (pmenang)
+	{
+		at = str(P);
+		df = def(M);
+	}
+	else
+	{
+		at = str(M);
+		df = def(P);
+	}
+	dmg= (at*4)-(df*3);
+	if (dmg<=0)
+	{
+		dmg=(rand()%13);
+	}
+	else
+	{
+		dmg+=(rand()%13);
+	}
+	return dmg;
 }
 
 void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr,  char *am)
 {
+	/*ALGORITMA*/
 	printf("=======================================================================\n");
 	printf("| ");
-	printnama(P.stat.name);
+	PrintNama(name(P));
 	printf(" | LVL %d | HP %d | STR %d | DEF %d | Round %d |\n",lvl(P),cHp(P),str(P),def(P),round);
 	printf("=======================================================================\n");
 	printf("| ");
-	printnama(M.stat.name);
+	PrintNama(name(M));
 	printf(" | HP %d | Command ",cHp(M));
 	printactmons(Qm,randa,randb,cr,am);
 	printf("    |\n");

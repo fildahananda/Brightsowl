@@ -9,15 +9,13 @@
 #include "player.h"
 
 
-void battle (Player *P, Enemy *M, boolean *menang);
-/*KAMUS LOKAL
- *Stack S (untuk mengacak action monster)*/
+void battle (Player *P, Enemy *M, int *menang);
+/*I.S. Menerima variabel Player dan Enemy 
+ * F.S. Membuat tampilan battle dan mengolah perhitungan damage*/
 
 void printactmons(Queue Q, int a, int b, int cr,char *am);
 /*I.S Menerima Queue aksi monster
  * F.S Menampilkan aksi monster dengan disembunyikan dua dari empat aksi*/
-
-int pmenang(char ap, char am);
  
 void printactuser(Queue Q, int cr, char *ap);
 /*I.S Menerima aksi user
@@ -25,6 +23,8 @@ void printactuser(Queue Q, int cr, char *ap);
  
  
 void inputactuser (Queue *Q);
+/*I.S */
+
 void printnama(Name A);
 
 
