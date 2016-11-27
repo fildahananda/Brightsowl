@@ -29,6 +29,13 @@ typedef struct {
 	Graph Graf;
 } Map;
 
+typedef struct {
+    POINT titik;
+    addrGraf area;
+}Posisi;
+
+#define Titik(P) (P).titik
+#define Area(P) (P).area
 #define Mat(M)			(M).Mat
 #define NeffMap(M)		((M).ArrMap).Neff
 #define ElmtMap(M,i)	((M).ArrMap).TI[i]

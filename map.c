@@ -274,6 +274,7 @@ void BacaMap (Map *M,char filename[])
 		j=1;
 		while((CKata.TabKata[1]!='|')&&(!EndKata))
 		{
+			Graf(*M)=AlokasiGraph(i);
 			k=1;
 			while(k<=CKata.Length)
 			{
@@ -292,6 +293,7 @@ void BacaMap (Map *M,char filename[])
 			{
 				ADVKATA();
 				j=1;
+				InsertKanan(&Graf(*M),i);
 				while((CKata.TabKata[1]!='|')&&(!EndKata))
 				{
 					k=1;

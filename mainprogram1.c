@@ -9,13 +9,13 @@
 #include "mesinkata.h"
 #include "point.h"
 
-void MainProgram ();
+void MainProgram (boolean *exit, Player *P, Map *M, boolean *logged);
 void TampilanMainMenu();
 void MainMenu(Kata *comm, Kata *NG, Kata *SG, Kata *LG, Kata *EX, Kata *BACK);
-void NewGame();
-void StartGame();
-void LoadGame();
-void Game();
+void NewGame(Player *P, Map *M, boolean *logged, boolean *exit);
+void StartGame(Player *P, Map *M, Kata *comm,Kata NG, Kata LG, Kata BACK,boolean *logged, boolean *exit);
+void LoadGame(Player *P, Map *M, boolean *logged, boolean *exit);
+void Game(Player *P, Map *M, boolean *exit, boolean *logged);
 Posisi SearchPosisi(Map M);
 void RandomPosisi(Map *M, int i,Posisi *P);
 void MoveUp(Posisi *P, Map *M, char *Elmt);
@@ -25,48 +25,40 @@ void MoveLeft(Posisi *P, Map *M, char *Elmt);
 void TampilanMap(Player *P, Map *M, int ind);
 void PrintKata(Kata K);
 boolean IsKataSama (Kata K1, Kata K2);
-void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *ex, boolean *logged, char *Elmt);
+void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *exit, boolean *logged, char *Elmt);
 //void wait(int seconds);
-
-boolean ex=false;
-boolean exmm;
-Player P;
-Map M;
-boolean logged;
-Posisi Pos;
-Kata comm;
-Enemy E;
-int hasil;
 int main()
-{	
-	LoadEnemy();
+{
+	boolean exit=false;
+	Player P;
+	Map M;
+	//LoadEnemy();
 	boolean logged=false;
 	CreateEmptyPlayer(&P);
 	MakeEmptyMap(&M);
-	while(!ex)
+	while(!exit)
 	{
-		MainProgram(&ex,&P,&M,&logged);
+		MainProgram(&exit,&P,&M,&logged);
 	}
 return 0;
 }
-void MainProgram ()
+void MainProgram (boolean *exit, Player *P, Map *M, boolean *logged)
 {
 	system("cls");
-	exmm=false;
 	Kata command, NG, SG, LG, EX,BACK;
 	MainMenu(&command,&NG,&SG,&LG,&EX,&BACK);
 	if(IsKataSama(NG,command))
 	{
-		NewGame();
+		NewGame(P,M,logged,exit);
 	}else if(IsKataSama(SG,command))
 	{
-		StartGame();
+		StartGame(P,M,&command,NG,LG,BACK,logged,exit);
 	}else if(IsKataSama(LG,command))
 	{
-		LoadGame();
+		LoadGame(P,M,logged,exit);
 	}else if(IsKataSama(EX,command))
 	{
-		ex=true;
+		*exit=true;
 	}
 }
 void TampilanMainMenu()
@@ -151,71 +143,42 @@ void MainMenu(Kata *comm, Kata *NG, Kata *SG, Kata *LG, Kata *EX, Kata *BACK)
 		}
 	}
 }
-void NewGame()
+void NewGame(Player *P, Map *M, boolean *logged, boolean *exit)
 {
 	char Command,C;
+	Posisi Pos;
 	addrGraf Adr;
 	printf("Username sebelumnya akan terhapus? Lanjutkan? Y or N\n");
 	scanf("%c",&Command);
 	scanf("%c",&C);
 	if(Command=='Y')
 	{
-		CreateEmptyPlayer(&P);
-		LoadNewPlayer(&P);
-		PrintInfoPlayer(&P);
-		MakeMap(15,30,5,&M);
-		RandomPosisi(&M,1,&Pos);
-		SimpanMap(&M,"map.txt");
-		logged=true;
+		LoadNewPlayer(P);
+		MakeMap(15,30,5,M);
+		RandomPosisi(M,1,&Pos);
+		SimpanMap(M,"map.txt");
+		*logged=true;
 		printf("Start Game? Y or N\n");
 		scanf("%c",&Command);
 		scanf("%c",&C);
 		if(Command=='Y')
 		{
-			Game();
+			Game(P,M,exit,logged);
 		}else
 		{
-			MainProgram();
+			MainProgram(exit,P,M,logged);
 		}
 	}else
 	{
-		MainProgram();
+		MainProgram(exit,P,M,logged);
 	}
 }
-void StartGame()
+void StartGame(Player *P, Map *M, Kata *comm,Kata NG, Kata LG, Kata BACK,boolean *logged, boolean *exit)
 {
-				Kata BACK;
-			BACK.Length = 4;
-			BACK.TabKata[1] = 'B';
-			BACK.TabKata[2] = 'A';
-			BACK.TabKata[3] = 'C';
-			(BACK).TabKata[4] = 'K';
-			Kata NG;
-			(NG).Length = 8;
-			(NG).TabKata[1] = 'N';
-			(NG).TabKata[2] = 'E';
-			(NG).TabKata[3] = 'W';
-			(NG).TabKata[4] = ' ';
-			(NG).TabKata[5] = 'G';
-			(NG).TabKata[6] = 'A';
-			(NG).TabKata[7] = 'M';
-			(NG).TabKata[8] = 'E';
-			Kata LG;
-			(LG).Length=9;
-			(LG).TabKata[1] = 'L';
-			(LG).TabKata[2] = 'O';
-			(LG).TabKata[3] = 'A';
-			(LG).TabKata[4] = 'D';
-			(LG).TabKata[5] = ' ';
-			(LG).TabKata[6] = 'G';
-			(LG).TabKata[7] = 'A';
-			(LG).TabKata[8] = 'M';
-			(LG).TabKata[9] = 'E';
-	
 	char C;
 	if(logged)
 	{
-		Game();
+		Game(P,M,exit,logged);
 	}else
 	{
 		printf(" ------------------------------------      NEW GAME?     ---------------------------------\n");
@@ -230,11 +193,11 @@ void StartGame()
 			while(C!='\n')
 			{
 				i++;
-				comm.TabKata[i]=C;
+				(*comm).TabKata[i]=C;
 				scanf("%c",&C);
 			}
-			comm.Length=i;
-			if((IsKataSama(NG,comm))||(IsKataSama(LG,comm))||(IsKataSama(BACK,comm)))
+			(*comm).Length=i;
+			if((IsKataSama(NG,*comm))||(IsKataSama(LG,*comm))||(IsKataSama(BACK,*comm)))
 			{
 				benar=true;
 			}else
@@ -242,68 +205,71 @@ void StartGame()
 				printf("Command tidak sesuai, input kembali\n,");
 			}
 		}
-		if(IsKataSama(NG,comm))
+		if(IsKataSama(NG,*comm))
 		{
-			NewGame();
-		}else if(IsKataSama(LG,comm))
+			NewGame(P,M,logged,exit);
+		}else if(IsKataSama(LG,*comm))
 		{
-			LoadGame();
-		}else if(IsKataSama(BACK,comm))
+			NewGame(P,M,logged,exit);
+		}else if(IsKataSama(BACK,*comm))
 		{
-			MainProgram();
+			MainProgram(exit,P,M,logged);
 		}
 	}
 }
-void LoadGame()
+void LoadGame(Player *P, Map *M, boolean *logged, boolean *exit)
 {
-	LoadSavedPlayer(&P);
-	BacaMap(&M,"map.txt");
+	LoadSavedPlayer(P);
+	BacaMap(M,"map.txt");
 	printf("LOADING FINISHED!!");
-	logged=true;
-	printf("Start Game? Y or N\n");
+	*logged=true;
+	printf("Start Game? Y or N");
 	char Command;
 	scanf("%c",&Command);
 		if(Command=='Y')
 		{
-			Game();
+			Game(P,M,exit,logged);
 		}else
 		{
-			MainProgram();
+			MainProgram(exit,P,M,logged);
 		}
 }
 
-void Game()
+void Game(Player *P, Map *M, boolean *exit, boolean *logged)
 {
+	Posisi Pos;
+	Enemy E;
 	boolean gameover=false;
 	int hasil;
 	char Elmt;
-	ex=false;
+	*exit=false;
 	printf("LETS PLAY ");
-	PrintNama(name(P));
+	PrintNama(name(*P));
 	printf("\n");
-	Pos=SearchPosisi(M);
+	Area(Pos)=SearchGraf(Graf(*M),1);
+	SearchElmt(SmallMap(*M,1),'P',&Ordinat(Titik(Pos)),&Absis(Titik(Pos)));
 	printf("Pos:%d %d\n",Ordinat(Titik(Pos)),Absis(Titik(Pos)));
-	printf("%d\n",InfoGraf(Area(Pos)));
-	while((!gameover)&&(!exmm))
+	//Pos=SearchPosisi(*M);
+	//printf("telah dicari\n");
+	while((!gameover)&&(!(*exit)))
 	{
-		TampilanMap(&P,&M,InfoGraf(Area(Pos)));
-        ReadCommandMap(&Pos,&P,&M,&exmm,&logged,&Elmt);
+		TampilanMap(P,M,InfoGraf(Area(Pos)));
+        ReadCommandMap(&Pos,P,M,exit,logged,&Elmt);
 		printf("Pos:%d %d\n",Ordinat(Titik(Pos)),Absis(Titik(Pos)));
-		CreateEmptyEnemy(&E);
 		if((Elmt=='E')||(Elmt=='B'))
 		{
 			printf("Oh there's a monster here, Let's Battle\n");
 			//wait(1);
+			system("cls");
 			if(Elmt=='E')
 			{
-				GetEnemy(&E,lvl(P),exp(P));
-				printf("%d\n",hpRate(E));
+				GetEnemy(&E,lvl(*P),exp(*P));
 			}else
 			{
 				printf("THE BOSS IS COMING\n");
-				GetBoss(&E,lvl(P),exp(P));
+				GetBoss(&E,lvl(*P),exp(*P));
 			}
-			battle(&P,&E,&hasil);
+			battle(P,&E,&hasil);
 			//switch (hasil){
 			//	case 1: Menang(); break;
 			//	case 2: Kalah(); break;
@@ -318,17 +284,20 @@ Posisi SearchPosisi(Map M)
 	Posisi P;
 	boolean found=false;
 	indeks Brs,Kol;
+	printf("dicari\n");
 	int i=1;
-	for(i=1;i<=NeffMap(M);i++)
+	while((i<=NeffMap(M))&&(!found))
 	{
 		SearchElmt(SmallMap(M,i),'P',&Brs,&Kol);
+		printf("telah dicari\n");
 		if((Brs!=0)&&(Kol!=0))
 		{
 			found=true;
 			Ordinat(Titik(P))=Brs;
 			Absis(Titik(P))=Kol;
-			Area(P)=SearchGraf(Graf(M),i);
+			//Area(P)=SearchGraf(Graf(M),i);
 		}
+		i++;
 	}
 	return P;
 }
@@ -498,7 +467,7 @@ boolean IsKataSama (Kata K1, Kata K2) {
 	} 
 
 }
-void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *exmm, boolean *logged, char *Elmt) {
+void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *exit, boolean *logged, char *Elmt) {
 /* comm merupakan inputan dari pemain */
 	Kata comm;
 	char C;
@@ -594,7 +563,7 @@ void ReadCommandMap(Posisi *Pos, Player *P, Map *M, boolean *exmm, boolean *logg
 	} else if (IsKataSama(comm, LO)) {
 		LoadSavedPlayer(P);
 	} else if (IsKataSama(comm, EX)) {
-		*exmm=true;
+		*exit=true;
 	}
 }
 //void wait(int seconds)

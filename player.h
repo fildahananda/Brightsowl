@@ -34,6 +34,8 @@ typedef struct {
 #define credit(P) (P).credit
 void CreateEmptyPlayer (Player *P);
 
+void LoadSavedPlayer (Player *P);
+
 void LoadPlayer (Player *P);
 
 void LoadNewPlayer (Player *P);

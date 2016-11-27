@@ -54,6 +54,7 @@ void ReadPlayer (Player *P, char namaFile[])
     int i,j,k;
     
     STARTKATA(namaFile);
+	CreateEmptyPlayer(P);
     for (i=0;i<=6 ; i++)
     {
         switch (i)
@@ -69,19 +70,24 @@ void ReadPlayer (Player *P, char namaFile[])
             }
             case 1:
             {
-                for(j=1; j<= CKata.Length;j++)
+
+				for(j=1; j<= CKata.Length;j++)
                 {
-                    exp(*P) = exp(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
+					printf("%c",CKata.TabKata[j]);
+                    exp(*P) =  exp(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
                 }
+				printf("%d",exp(*P));
                 ADVKATA();
                 break;
             }
             case 2:
             {
-                for(j=1; j<= CKata.Length;j++)
+				for(j=1; j<= CKata.Length;j++)
                 {
                     lvl(*P) = lvl(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
-                }
+					
+				printf("vl%d", lvl(*P));
+				}
                 ADVKATA();
                 break;
             }
@@ -89,7 +95,7 @@ void ReadPlayer (Player *P, char namaFile[])
             {
                 for(j=1; j<=CKata.Length;j++)
                 {
-                    cHp(*P) = cHp(*P)*10 + ((int) (CKata.TabKata[j]-'0'));
+                    cHp(*P) = cHp(*P)*10 + ((int)CKata.TabKata[j] -((int) '0'));
                 }
                 ADVKATA();
                 for(j=1; j<=CKata.Length;j++)

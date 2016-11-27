@@ -10,7 +10,7 @@
 #include "stat.h"
 #include "stdlib.h"
 #include "mesinkata.h"
-#define maxEnemy 1
+#define maxEnemy 3
 #define maxBoss 1
 Enemy ListEnemy[maxEnemy+1];
 Enemy Boss[maxBoss+1];
@@ -44,7 +44,7 @@ void LoadEnemy ()
                 {   for(j=1; j<= CKata.Length;j++)
                 {
                     tabName(ListEnemy[k])[j] = CKata.TabKata[j];
-                    lengthName(ListEnemy[k]);
+                    lengthName(ListEnemy[k])= CKata.Length;
                 }
                     ADVKATA();
                     break;
@@ -100,7 +100,7 @@ void LoadEnemy ()
     
     //Load boss
     
-    for(k=0;k<maxBoss; k++)
+    /*for(k=0;k<maxBoss; k++)
     {
         CreateEmptyEnemy(&ListEnemy[k]);
         for (i=0;i<=6 ; i++)
@@ -163,7 +163,7 @@ void LoadEnemy ()
                     break;
             }
         }
-    }
+    }*/
 }
 
 void GetStatEnemy(Enemy *E, int level)

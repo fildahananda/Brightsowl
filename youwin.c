@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
+//#include <conio.h>
 #include "boolean.h"
 
 
@@ -46,15 +46,15 @@ void Mati() {
 	printf("   []    [][][][]  [][][]      [][][][]  [] [][][]\n");
 }
 
-int main() {
-	Menang();
-	printf("\n");
-	printf("\n");
-	Kalah();
-	printf("\n");
-	printf("\n");
-	Seri();
-	printf("\n");
-	printf("\n");
-	Mati();
-}
+//int main() {
+//	Menang();
+//	printf("\n");
+//	printf("\n");
+//	Kalah();
+//	printf("\n");
+//	printf("\n");
+//	Seri();
+//	printf("\n");
+//	printf("\n");
+//	Mati();
+//}

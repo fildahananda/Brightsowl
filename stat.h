@@ -8,10 +8,10 @@
 
 #ifndef stat_h
 #define stat_h
-#define NMax 100
+#define NMaks 100
 
 typedef struct {
-    char TabKata[NMax+1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
+    char TabKata[NMaks+1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
     int Length;
 } Name;
 typedef struct {

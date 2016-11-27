@@ -90,10 +90,8 @@ void ReadFileM (Stack *S, Queue *TQ,int l)
 		AddAsLastEli(&p,n);
 	}
 	CreateEmptyStack(S);
-	i=GetFirstIdxi(p);
-	while (!IsFullStack(*S) && i<=GetLastIdxi(p))
+	for (i=GetFirstIdxi(p);i<=GetLastIdxi(p);i++)
 	{
 		Push(S, TQ[Elmti(p,i)]);
-		i++;
 	}
 }

@@ -64,7 +64,6 @@ void battle (Player *P, Enemy *M, int *menang)
 	if (cHp(*M)<=0)
 	{
 		(*menang)=1;
-		AddExp(P,round,maxM(*M));
 	}
 	else if (cHp(*P)<=0)
 	{

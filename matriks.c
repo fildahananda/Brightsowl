@@ -16,7 +16,7 @@
 
 /* ********** DEFINISI PROTOTIPE PRIMITIF ********** */
 /* *** Konstruktor membentuk MATRIKS *** */
-void MakeMATRIKS (int NB, int NK, MATRIKS * M) //pake
+void MakeMATRIKS (int NB, int NK, MATRIKS * M)
 /* Membentuk sebuah MATRIKS "kosong" yang siap diisi berukuran NB x NK di "ujung kiri" memori */
 /* I.S. NB dan NK adalah valid untuk memori matriks yang dibuat */
 /* F.S. Matriks M sesuai dengan definisi di atas terbentuk */
@@ -28,6 +28,7 @@ void MakeMATRIKS (int NB, int NK, MATRIKS * M) //pake
 #define NBrsEff(M) (M).NBrsEff
 #define NKolEff(M) (M).NKolEff
 #define Elmt(M,i,j) (M).Mem[(i)][(j)]
+
 indeks GetFirstIdxBrs (MATRIKS M)
 /* Mengirimkan indeks baris terkecil M */
 {
@@ -51,28 +52,25 @@ indeks GetLastIdxKol (MATRIKS M)
 
 void SearchElmt(MATRIKS M, char X, indeks *Brs, indeks *Kol)
 {
-	int i=GetFirstIdxBrs(M);
-	int j=GetFirstIdxKol(M);
-	boolean found;
-	found=false;
-	*Brs=0; *Kol=0;
-	while((i<=GetLastIdxBrs(M))&&(!found))
+	int i=1;
+	int j=1;
+	*Brs=0;
+	*Kol=0;
+	for(i=1;i<=NBrsEff(M);i++)
 	{
-			while((j<=GetLastIdxKol(M))&&(!found))
-			{
-				if(Elmt(M,i,j)==X)
+		for(j=1;j<=NKolEff(M);j++)
+		{
+			//printf("%d %d %c",i,j,Elmt(M,i,j));
+			if(Elmt(M,i,j)==X)
 				{
-					found=true;
 					*Brs=i;
 					*Kol=j;
 				}
-				j++;
-			}
-			i++;
+		}
 	}
 }
 /* *** Selektor "DUNIA MATRIKS" *** */
-void TulisMATRIKS (MATRIKS M, int n) //pake
+void TulisMATRIKS (MATRIKS M, int n)
 /* I.S. M terdefinisi */
 /* F.S. Nilai M(i,j) ditulis ke layar per baris per kolom, masing-masing elemen per baris
    dipisahkan sebuah spasi */
