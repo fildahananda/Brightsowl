@@ -1,0 +1,23 @@
+noname
+0
+1
+100 100
+10
+10
+
+1 hp  +100 l
+2 str +100 l
+3 def +100 l
+4 str *12 l
+5 hp  *11 l
+6 def *12 l
+7 hp  *11 l
+8 str *15 l
+9 str +10000 l
+10 hp +10000 l
+11 hp +15000 l
+12 def *15 l
+13 def +10000 l
+14 hp +10000 l
+15 hp +15000 l
+

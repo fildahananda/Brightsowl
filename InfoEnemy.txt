@@ -1,0 +1,13 @@
+minion 100 100 100
+adfd
+adfd
+adfd
+adfd
+adfd
+adfd
+adfd
+adfd
+adfd
+adfd
+
+name hp str def

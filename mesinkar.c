@@ -9,8 +9,8 @@ boolean EOP;
 
 static FILE * pita;
 static int retval;
-
-void START(char filename[]) {
+char  namaFile[1000];
+void START() {
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
    Karakter pertama yang ada pada pita posisinya adalah pada jendela.
    I.S. : sembarang
@@ -18,7 +18,9 @@ void START(char filename[]) {
           Jika CC = MARK maka EOP akan menyala (true) */
 
 	/* Algoritma */
-	pita = fopen(filename,"r");
+	pita = fopen("/Users/RichardMatthew/Documents/Programming/C/tubesAlstukdat/player/player/IP.txt","r");
+//    pita = fopen(namaFile,"r");
+    
 	ADV();
 }
 
