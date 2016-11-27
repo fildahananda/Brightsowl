@@ -45,13 +45,8 @@ void SearchElmt(MATRIKS M, char X, indeks *Brs, indeks *Kol);
 void TulisMATRIKS (MATRIKS M, int n);
 /* I.S. M terdefinisi */
 /* F.S. Nilai M(i,j) ditulis ke layar per baris per kolom, masing-masing elemen per baris 
-   dipisahkan sebuah spasi */
+  */
 /* Proses: Menulis nilai setiap elemen M ke layar dengan traversal per baris dan per kolom */
-/* Contoh: menulis matriks 3x3 (ingat di akhir tiap baris, tidak ada spasi)
-1 2 3
-4 5 6
-8 9 10
-*/
 
 /* ********** Operasi lain ********** */
 int NBElmt (MATRIKS M);
