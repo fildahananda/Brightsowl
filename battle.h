@@ -1,3 +1,6 @@
+//ADT BATTLE
+//MENANGANI BATTLE USER DENGAN ENEMY
+
 #ifndef battle_H
 #define battle_H
 
@@ -23,16 +26,19 @@ void printactuser(Queue Q, int cr, char *ap);
  
  
 void inputactuser (Queue *Q);
-/*I.S */
-
-void printnama(Name A);
+/*I.S Menerima masukan aksi user
+ * F.S. Memasukkan aksi user ke Queue*/
 
 
 void printcomment(Player *P, Enemy *M,char ap, char am);
+/*I.S. Menerima masukan aksi player dan monster saat itu
+ * F.S. Menampilkan comment pada battle*/
 
 int randomdmg (Player P, Enemy M, boolean pmenang);
 /*I.S Menerima data dari monster, player, dan kebenaran apakah player menang atau tidak
  * F.S Menghasilkan nilai damage dan mengurangi HP yang kalah*/
 
 void cetakbattle (Player P, Enemy M, Queue Qp, Queue Qm, int round, int randa, int randb, int cr, char *am);
+/*I.S. Menerima parameter-parameter untuk mencetak tampilan battle
+ * F.S. Menampilkan tampilan battle secara umum */
 #endif
